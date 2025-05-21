@@ -108,7 +108,8 @@ def decompile_to_single_file(path: Path,
                              emit_types: bool = True,
                              exclude_tags: bool = False,
                              tags: str = None,
-                             verbose: bool = True):
+                             verbose: bool = True,
+                             exclude_func_decls: bool = False):
     """
     Use Ghidra's CppExporter to decompile all functions to a single file
     """
@@ -125,7 +126,7 @@ def decompile_to_single_file(path: Path,
 
     try:
         # Ghidra CppExporter before 10.3.3 and later
-        decompiler = CppExporter(None, create_header, create_file, emit_types, exclude_tags, tags)
+        decompiler = CppExporter(None, create_header, create_file, emit_types, exclude_tags, tags, exclude_func_decls)
     except TypeError:
         # Ghidra CppExporter before 10.3.3
         decompiler = CppExporter(create_header, create_file, emit_types, exclude_tags, tags)
@@ -255,7 +256,7 @@ def decompile(args: Namespace):
             print(f"Decompiling {len(all_funcs)} functions using Ghidra's CppExporter")
             c_file = decomp_path / Path(bin_path.name + '.c')
             start = time()
-            decompile_to_single_file(c_file, program)
+            decompile_to_single_file(c_file, program, exclude_func_decls=args.exclude_func_decls)
             print(f'Decompiled {len(all_funcs)} functions for {program.name} in {time() - start}')
             print(f"Wrote results to {c_file} and {c_file.stem + '.h'}")
         else:

@@ -25,6 +25,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-v", "--version", action="version", version=__version__)
     parser.add_argument("--skip-cache", action='store_true',
                         help='Skip cached and genearate new decomp and callgraphs.')
+    parser.add_argument('--exclude-func-decls', action='store_true', help='Exclude function declarations in the header file when using --cppexport')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--sym-file-path', help='Specify single pdb symbol file for bin')
